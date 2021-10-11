@@ -865,6 +865,25 @@ public class RNCWebViewManager extends SimpleViewManager<WebView> {
     protected @Nullable String ignoreErrFailedForThisURL = null;
     protected @Nullable BasicAuthCredential basicAuthCredential = null;
 
+    @Override
+    public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
+      String url = request.getUrl().toString();
+      WebResourceResponse resp = FontCache.getCache(view.getContext(), url);
+      if(resp != null) {
+        return resp;
+      }
+      return super.shouldInterceptRequest(view, request);
+    }
+
+    @Override
+    public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
+      WebResourceResponse resp = FontCache.getCache(view.getContext(), url);
+      if(resp != null) {
+        return resp;
+      }
+      return super.shouldInterceptRequest(view, url);
+    }
+    
     public void setIgnoreErrFailedForThisURL(@Nullable String url) {
       ignoreErrFailedForThisURL = url;
     }
